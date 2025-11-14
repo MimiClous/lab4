@@ -7,6 +7,8 @@ void fill_Array(int *array, int size);
 void bubleSort(int *array, int size);
 void selectSort(int *array, int size);
 void print_table(double *times);
+void quickSort(int *array, int size);
+
 
 int main(){
     double *times = (double*)malloc(12 * sizeof(double));
@@ -197,7 +199,113 @@ int main(){
     printf("Время выполнения: %f секунд\n\n", seconds);
     free(array);
 
+
+
+
+    printf("Быстрая сортировка на 10 элементов\n");
+    size = 10;
+    array = (int*)malloc(size * sizeof(int));
+
+    if (array == NULL) {
+        printf("Ошибка выделения памяти!\n");
+        return 1;
+    }
+
+    fill_Array(array, size);
+
+    start = clock();
+    selectSort(array, size);
+    end = clock();
+    seconds = (double)(end - start) / CLOCKS_PER_SEC;
+    times[8] = seconds;
+
+
+    printf("Время выполнения: %f секунд\n\n", seconds);
+    free(array);
+
+    
+    printf("Быстрая сортировка на 1000 элементов\n");
+    size = 1000;
+    array = (int*)malloc(size * sizeof(int));
+
+    if (array == NULL) {
+        printf("Ошибка выделения памяти!\n");
+        return 1;
+    }
+
+    fill_Array(array, size);
+
+
+    start = clock();
+    selectSort(array, size);
+    end = clock();
+    seconds = (double)(end - start) / CLOCKS_PER_SEC;
+    times[9] = seconds;
+
+
+    printf("Время выполнения: %f секунд\n\n", seconds);
+    free(array);
+
+    
+    printf("Быстрая сортировка на 10_000 элементов\n");
+    size = 10000;
+    array = (int*)malloc(size * sizeof(int));
+
+    if (array == NULL) {
+        printf("Ошибка выделения памяти!\n");
+        return 1;
+    }
+
+    fill_Array(array, size);
+
+
+    start = clock();
+    selectSort(array, size);
+    end = clock();
+    seconds = (double)(end - start) / CLOCKS_PER_SEC;
+    times[10] = seconds;
+
+
+    printf("Время выполнения: %f секунд\n\n", seconds);
+    free(array);
+
+    
+    printf("Быстрая сортировка на 100_000 элементов\n");
+    size = 100000;
+    array = (int*)malloc(size * sizeof(int));
+
+    if (array == NULL) {
+        printf("Ошибка выделения памяти!\n");
+        return 1;
+    }
+
+    fill_Array(array, size);
+
+
+    start = clock();
+    selectSort(array, size);
+    end = clock();
+    seconds = (double)(end - start) / CLOCKS_PER_SEC;
+    times[11] = seconds;
+
+
+    printf("Время выполнения: %f секунд\n\n", seconds);
+    free(array);
+
     print_table(times);
+
+
+
+
+
+
+
+
+
+
+
+
+
     return 0;
 }
 
@@ -235,36 +343,88 @@ void selectSort(int *array, int size) {
         }
     }
 }
+void quickSort(int *array, int size) {
 
+    if (size <= 1) {
+        return;
+    }
+    
+    int pivot = array[size / 2];  
+    int *left = (int*)malloc(size * sizeof(int));
+    int *right = (int*)malloc(size * sizeof(int));
+    int *middle = (int*)malloc(size * sizeof(int));
+    
+    if (left == NULL || right == NULL || middle == NULL) {
+        printf("Ошибка выделения памяти!\n");
+        free(left);
+        free(right);
+        free(middle);
+        return;
+    }
+    
+    int left_count = 0, right_count = 0, middle_count = 0;
+    
+
+    for (int i = 0; i < size; i++) {
+        if (array[i] < pivot) {
+            left[left_count++] = array[i];
+        } else if (array[i] > pivot) {
+            right[right_count++] = array[i];
+        } else {
+            middle[middle_count++] = array[i];
+        }
+    }
+    
+    quickSort(left, left_count);
+    quickSort(right, right_count);
+    
+    int index = 0;
+    
+    for (int i = 0; i < left_count; i++) {
+        array[index++] = left[i];
+    }
+    for (int i = 0; i < middle_count; i++) {
+        array[index++] = middle[i];
+    }
+    for (int i = 0; i < right_count; i++) {
+        array[index++] = right[i];
+    }
+    
+    // Освобождаем память
+    free(left);
+    free(right);
+    free(middle);
+}
 
 void print_table(double *times) {
     printf("+=========================+========================+========================+\n");
     printf("|      Тип сортировки     |    Кол-во элементов    |    Время выполнения    |\n");
     printf("+=========================+========================+========================+\n");
-    printf("| Пузырьковая сортировка  |          10            |      %12.6f сек. |\n", times[0]);
+    printf("| Пузырьковая сортировка  |          10            |        %8.6f сек.    |\n", times[0]);
+    printf("+-------------------------+------------------------+------------------------+\n");
+    printf("| Пузырьковая сортировка  |         1000           |        %8.6f сек.    |\n", times[1]);
+    printf("+-------------------------+------------------------+------------------------+\n");
+    printf("| Пузырьковая сортировка  |        10 000          |        %8.4f сек.    |\n", times[2]);
+    printf("+-------------------------+------------------------+------------------------+\n");
+    printf("| Пузырьковая сортировка  |        100 000         |        %8.4f сек.    |\n", times[3]);
     printf("+=========================+========================+========================+\n");
-    printf("| Пузырьковая сортировка  |         1000           |      %12.6f сек. |\n", times[1]);
+    printf("| Сортировка выбором      |          10            |        %8.6f сек.    |\n", times[4]);
+    printf("+-------------------------+------------------------+------------------------+\n");
+    printf("| Сортировка выбором      |         1000           |        %8.6f сек.    |\n", times[5]);
+    printf("+-------------------------+------------------------+------------------------+\n");
+    printf("| Сортировка выбором      |        10 000          |        %8.4f сек.    |\n", times[6]);
+    printf("+-------------------------+------------------------+------------------------+\n");
+    printf("| Сортировка выбором      |        100 000         |        %8.4f сек.    |\n", times[7]);
     printf("+=========================+========================+========================+\n");
-    printf("| Пузырьковая сортировка  |        10_000          |      %12.6f сек. |\n", times[2]);
-    printf("+=========================+========================+========================+\n");
-    printf("| Пузырьковая сортировка  |        100_000         |      %12.6f сек. |\n", times[3]);
-    printf("+=========================+========================+========================+\n");
-    printf("| Сортировка выбором      |          10            |      %12.6f сек. |\n", times[4]);
-    printf("+=========================+========================+========================+\n");
-    printf("| Сортировка выбором      |         1000           |      %12.6f сек. |\n", times[5]);
-    printf("+=========================+========================+========================+\n");
-    printf("| Сортировка выбором      |        10_000          |      %12.6f сек. |\n", times[6]);
-    printf("+=========================+========================+========================+\n");
-    printf("| Сортировка выбором      |        100_000         |      %12.6f сек. |\n", times[7]);
-    printf("+=========================+========================+========================+\n");
-    printf("| Сортировка выбором      |          10            |      %12.6f сек. |\n", times[8]);
-    printf("+=========================+========================+========================+\n");
-    printf("| Сортировка выбором      |         1000           |      %12.6f сек. |\n", times[9]);
-    printf("+=========================+========================+========================+\n");
-    printf("| Сортировка выбором      |        10_000          |      %12.6f сек. |\n", times[10]);
-    printf("+=========================+========================+========================+\n");
-    printf("| Сортировка выбором      |        100_000         |      %12.6f сек. |\n", times[11]);
+    printf("| Быстрая сортировка      |          10            |        %8.6f сек.    |\n", times[8]);
+    printf("+-------------------------+------------------------+------------------------+\n");
+    printf("| Быстрая сортировка      |         1000           |        %8.6f сек.    |\n", times[9]);
+    printf("+-------------------------+------------------------+------------------------+\n");
+    printf("| Быстрая сортировка      |        10 000          |        %8.4f сек.    |\n", times[10]);
+    printf("+-------------------------+------------------------+------------------------+\n");
+    printf("| Быстрая сортировка      |        100 000         |        %8.4f сек.    |\n", times[11]);
     printf("+=========================+========================+========================+\n");
 }
+
 
     
