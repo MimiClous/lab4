@@ -390,7 +390,6 @@ void quickSort(int *array, int size) {
         array[index++] = right[i];
     }
     
-    // Освобождаем память
     free(left);
     free(right);
     free(middle);
